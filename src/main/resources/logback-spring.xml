@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 默认文件输出格式 -->
+    <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+    <!-- test测试环境下日志文件路径 -->
+    <property name="INFO_PATH" value="d:/info.log" />
+    <property name="ERROR_PATH" value="d:/error.log" />
+    <!-- pro生产环境下日志文件路径 -->
+    <property name="PRO_FILE_PATH" value="/opt/test/log" />
+ 
+    
+        <!-- 每天产生一个文件 -->
+        <appender name="INRO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!-- 文件路径 -->
+            <file>${INFO_PATH}</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 文件名称 -->
+                <fileNamePattern>${INFO_PATH}/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 文件最大保存历史数量 -->
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!-- 文件路径 -->
+            <file>${ERROR_PATH}</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 文件名称 -->
+                <fileNamePattern>${ERROR_PATH}/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 文件最大保存历史数量 -->
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+            <!-- 只打印错误日志 -->
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+	            <level>ERROR</level>
+	            <onMatch>ACCEPT</onMatch>
+	            <onMismatch>DENY</onMismatch>
+	        </filter>
+
+        </appender>
+        
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">   
+    <!-- encoder 默认配置为PatternLayoutEncoder -->   
+    <encoder>   
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>   
+    </encoder>   
+  </appender>
+        <logger name="com.sinhen" level="DEBUG" additivity="false">
+        	<appender-ref ref="INRO_FILE" />
+        	<appender-ref ref="ERROR_FILE" />
+        </logger>
+        <root level="DEBUG">             
+		    <appender-ref ref="STDOUT" />   
+		  </root> 
+        
+    
+</configuration>
